@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom'
 
 import './styles.css'
 import { FiArrowLeft } from 'react-icons/fi'
-
-import heroesImg from '../../assets/heroes.png'
 import logoImg from '../../assets/logo.svg'
 
 
