@@ -1,12 +1,54 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 
 import './styles.css'
 import { FiArrowLeft } from 'react-icons/fi'
 import logoImg from '../../assets/logo.svg'
 
 
+import api from '../../services/api'
+
+
 export default function Register() {
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [whatsapp, setWhatsapp] = useState('')
+    const [city, setCity] = useState('')
+    const [uf, setUf] = useState('')
+
+    const history = useHistory()
+
+    function handleRegister(e){
+        e.preventDefault()
+        const data = {
+            name,
+            email,
+            whatsapp,
+            city,
+            uf
+        }
+
+        api.post('/ongs', data).then(snapshot => {
+            if(!snapshot.data.error){
+                alert(`${snapshot.data.message}\nSeu Id de acesso: ${snapshot.data.id}`)
+                
+                //redirecionando o usuario para tela de login
+                history.push('/')
+            }
+            else{
+                alert(`${snapshot.data.message}`)
+            }
+        })
+
+
+
+    }
+
+
+
+
+
+
     return (
         <div className="register-container">
             <div className="content">
@@ -20,17 +62,42 @@ export default function Register() {
                     <Link to="/" className="back-link">Voltar</Link>
 
                 </section>
-                <form>
-                <input placeholder="Nome da ONG" />
-                <input type="email" placeholder="E-mail"/>
-                <input placeholder="Whatsapp" />
-                
-                <div className="input-group">
-                    <input placeholder="Cidade"/>
-                    <input placeholder="UF" style={{ width: 80 }}/>
-                </div>
-                
-                <buttton className="button" type="submit">Cadastrar</buttton>
+
+                <form onSubmit={ handleRegister }>
+                    <input 
+                        placeholder="Nome da ONG"
+                        value={name}
+                        onChange={e => setName(e.target.value)} 
+                    />
+
+                    <input type="email" 
+                        placeholder="E-mail"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                    />
+
+                    <input 
+                        placeholder="Whatsapp"
+                        value={whatsapp}
+                        onChange={e => setWhatsapp(e.target.value)}    
+                    />
+                    
+                    <div className="input-group">
+                        <input 
+                            placeholder="Cidade"
+                            value={city}
+                            onChange={e => setCity(e.target.value)}
+                        />
+
+                        <input
+                            placeholder="UF"
+                            style={{ width: 80 }}
+                            value={uf}
+                            onChange={e => setUf(e.target.value)}
+                        />
+                    </div>
+                    
+                    <button className="button" type="submit">Cadastrar</button>
                 </form>
 
 
